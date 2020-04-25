@@ -20,7 +20,7 @@ class Transaction {
   @Column()
   type: string;
 
-  @Column('decimal')
+  @Column('decimal', { precision: 10, scale: 2 })
   value: number;
 
   @ManyToOne(() => Category)
