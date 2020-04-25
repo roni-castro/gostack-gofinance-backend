@@ -7,7 +7,7 @@ import TransactionsRepository from '../repositories/TransactionsRepository';
 interface CreateTransactionRequestDTO {
   title: string;
   value: number;
-  type: 'income' | 'outcome';
+  type: string;
   categoryName: string;
 }
 class CreateTransactionService {
