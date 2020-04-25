@@ -1,6 +1,5 @@
-// import AppError from '../errors/AppError';
-
 import { getCustomRepository } from 'typeorm';
+import AppError from '../errors/AppError';
 import Transaction from '../models/Transaction';
 import CategoriesRepository from '../repositories/CategoryRepository';
 import TransactionsRepository from '../repositories/TransactionsRepository';
@@ -20,6 +19,12 @@ class CreateTransactionService {
   }: CreateTransactionRequestDTO): Promise<Transaction> {
     const transactionRepository = getCustomRepository(TransactionsRepository);
     const categoryRepository = getCustomRepository(CategoriesRepository);
+    const balance = await transactionRepository.getBalance();
+    if (type === 'outcome' && value > balance.total) {
+      throw new AppError(
+        `You cant withdraw ${value} from your account. Its currently value is ${balance.total}`,
+      );
+    }
     const category = await categoryRepository.findCategoryByTitleOrCreate(
       categoryName,
     );
